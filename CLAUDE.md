@@ -4,34 +4,74 @@ This file provides guidance to Claude Code when working in this repository.
 
 ## Project Overview
 
-> Describe the purpose and goals of this project here.
+**ProjectMarcy** is a community platform for salespeople — a safe space to vent, connect, share memes, listen to music together, and de-stress. Think Reddit, but built specifically for the emotional reality of sales.
+
+Key features:
+- Reddit-style posts, comments, and upvotes
+- Meme and image sharing
+- Anonymous posting OR real-identity accounts (user's choice)
+- Private chat rooms for 2+ people (real-time via WebSockets)
+- Synchronized music listening rooms
+- AI companion (Claude) for empathetic listening and mood-based content curation
 
 ## Repository Structure
 
 ```
 ProjectMarcy/
-├── CLAUDE.md        # This file — Claude Code guidance
-└── ...              # Add your project directories/files here
+├── CLAUDE.md                  # This file — Claude Code guidance
+├── .gitignore
+├── backend/                   # Python + FastAPI
+│   ├── requirements.txt
+│   ├── .env.example
+│   ├── main.py                # FastAPI app + Socket.IO server entry point
+│   └── app/
+│       ├── ai/
+│       │   └── claude.py      # AI companion (listener + content curator)
+│       ├── routes/            # REST API route modules (add as you build)
+│       └── models/            # SQLAlchemy database models
+└── frontend/                  # Next.js 15 + TypeScript
+    ├── package.json
+    ├── next.config.ts
+    ├── tailwind.config.ts
+    ├── .env.example
+    └── src/
+        ├── app/               # Next.js App Router pages
+        └── lib/
+            ├── api.ts         # Axios client for backend REST calls
+            └── socket.ts      # Socket.IO client (real-time rooms + music)
 ```
 
 ## Development Setup
 
-> Add setup instructions here (e.g., dependencies, environment variables, build steps).
+**Prerequisites:** Python 3.11+, Node.js 20+, PostgreSQL, Redis
+
+### Backend
+```bash
+cd backend
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env          # then fill in ANTHROPIC_API_KEY, DATABASE_URL, etc.
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+cp .env.example .env.local    # then fill in values
+```
 
 ## Common Commands
 
 ```bash
-# Install dependencies
-# <your install command>
+# --- Backend ---
+cd backend
+uvicorn main:socket_app --reload --port 8000   # start dev server
 
-# Run tests
-# <your test command>
-
-# Build / start
-# <your build/start command>
-
-# Lint / format
-# <your lint command>
+# --- Frontend ---
+cd frontend
+npm run dev      # start Next.js dev server on http://localhost:3000
+npm run build    # production build
+npm run lint     # ESLint
 ```
 
 ## Code Style & Conventions

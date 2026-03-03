@@ -1,0 +1,34 @@
+# Web framework
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+
+# AI — Anthropic Claude SDK
+anthropic>=0.40.0
+
+# Real-time (WebSockets for chat rooms + music sync)
+python-socketio>=5.11.0
+python-engineio>=4.9.0
+
+# Database ORM
+sqlalchemy>=2.0.0
+alembic>=1.13.0
+psycopg2-binary>=2.9.9
+
+# Cache / pub-sub (for real-time room state)
+redis>=5.0.0
+
+# Auth & security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.9
+
+# Config & environment
+python-dotenv>=1.0.0
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+
+# HTTP client (for external APIs, e.g. Spotify)
+httpx>=0.27.0
+
+# Image handling (meme uploads, thumbnails)
+pillow>=10.3.0
