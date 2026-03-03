@@ -28,6 +28,9 @@ sio = socketio.AsyncServer(
 )
 socket_app = socketio.ASGIApp(sio, other_asgi_app=app)
 
+# Tracks which sids are in each room for live user counts
+room_occupancy: dict[str, set] = {}
+
 
 # --- REST routes ---
 @app.get("/health")
@@ -54,6 +57,10 @@ async def connect(sid, environ, auth):
 
 @sio.event
 async def disconnect(sid):
+    for room_id, members in room_occupancy.items():
+        if sid in members:
+            members.discard(sid)
+            await sio.emit("room_user_count", {"room_id": room_id, "count": len(members)}, room=room_id)
     print(f"Client disconnected: {sid}")
 
 
@@ -62,13 +69,19 @@ async def join_room(sid, data):
     """User joins a private chat room or music room."""
     room_id = data.get("room_id")
     await sio.enter_room(sid, room_id)
-    await sio.emit("room_joined", {"room_id": room_id}, room=room_id)
+    room_occupancy.setdefault(room_id, set()).add(sid)
+    count = len(room_occupancy[room_id])
+    await sio.emit("room_user_count", {"room_id": room_id, "count": count}, room=room_id)
 
 
 @sio.event
 async def leave_room(sid, data):
     room_id = data.get("room_id")
     await sio.leave_room(sid, room_id)
+    if room_id in room_occupancy:
+        room_occupancy[room_id].discard(sid)
+        count = len(room_occupancy[room_id])
+        await sio.emit("room_user_count", {"room_id": room_id, "count": count}, room=room_id)
 
 
 @sio.event

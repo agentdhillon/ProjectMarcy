@@ -87,13 +87,21 @@ export default function VentPage() {
           />
 
           {phase === "idle" && (
-            <button
-              type="submit"
-              disabled={!text.trim()}
-              className="self-end px-5 py-2.5 rounded-xl bg-marcy-500 hover:bg-marcy-600 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-sm transition-colors"
-            >
-              Let it out
-            </button>
+            <div className="flex flex-col gap-3">
+              <button
+                type="submit"
+                disabled={!text.trim()}
+                className="self-end px-5 py-2.5 rounded-xl bg-marcy-500 hover:bg-marcy-600 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-sm transition-colors"
+              >
+                Let it out
+              </button>
+              <div className="flex items-center justify-between rounded-xl border border-gray-800 bg-gray-900/50 px-4 py-3 text-sm">
+                <span className="text-gray-500">Others are venting right now.</span>
+                <Link href="/vent/room" className="text-marcy-500 hover:underline font-medium">
+                  Join the room →
+                </Link>
+              </div>
+            </div>
           )}
 
           {phase === "loading" && (
