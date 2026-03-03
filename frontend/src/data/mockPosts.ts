@@ -112,3 +112,23 @@ export const MOCK_POSTS: Post[] = [
     createdAt: "3d ago",
   },
 ];
+
+export interface Comment {
+  id: string;
+  postId: string;
+  content: string;
+  author: string | null;
+  createdAt: string;
+}
+
+export const MOCK_COMMENTS: Comment[] = [
+  { id: "c1", postId: "1", content: "This happened to me last month. 4 months in, ghosted right before contract. Still not over it.", author: null, createdAt: "1h ago" },
+  { id: "c2", postId: "1", content: "Send one last email: 'Closing your file Friday — let me know if priorities changed.' Works ~30% of the time.", author: "closervibes", createdAt: "55m ago" },
+  { id: "c3", postId: "1", content: "It's rarely about you. Deals die for internal reasons that never get communicated. Cold comfort, but true.", author: null, createdAt: "40m ago" },
+  { id: "c4", postId: "2", content: "Just reply 'I see you' 😭", author: "dialfordays", createdAt: "3h ago" },
+  { id: "c5", postId: "2", content: "My record is 91 opens. They never replied. I still think about it.", author: null, createdAt: "2h ago" },
+  { id: "c6", postId: "3", content: "18 months!! You have the patience of a saint. Congrats 🎉", author: null, createdAt: "5h ago" },
+  { id: "c7", postId: "3", content: "This is the kind of post I come here for. Well done.", author: "pipedreampat", createdAt: "4h ago" },
+  { id: "c8", postId: "7", content: "Treat each call like a separate event. The streak doesn't exist — only the next call does.", author: "salesgremlin", createdAt: "20h ago" },
+  { id: "c9", postId: "7", content: "Journaling after a bad week genuinely helped me. Write down what you can control vs. what you can't.", author: null, createdAt: "18h ago" },
+];

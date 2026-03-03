@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { PenLine } from "lucide-react";
 import { PostCard } from "@/components/PostCard";
-import { MOCK_POSTS, type PostTag } from "@/data/mockPosts";
+import { CreatePostModal } from "@/components/CreatePostModal";
+import { MOCK_POSTS, type Post, type PostTag } from "@/data/mockPosts";
 
 type Filter = PostTag | "all";
 
@@ -17,12 +18,19 @@ const FILTERS: { label: string; value: Filter }[] = [
 ];
 
 export default function FeedPage() {
+  const [posts, setPosts] = useState<Post[]>(MOCK_POSTS);
   const [activeFilter, setActiveFilter] = useState<Filter>("all");
+  const [showModal, setShowModal] = useState(false);
 
-  const posts =
-    activeFilter === "all"
-      ? MOCK_POSTS
-      : MOCK_POSTS.filter((p) => p.tag === activeFilter);
+  const filtered =
+    activeFilter === "all" ? posts : posts.filter((p) => p.tag === activeFilter);
+
+  function handleNewPost(data: Omit<Post, "id" | "upvotes" | "commentCount" | "createdAt">) {
+    setPosts((prev) => [
+      { id: Date.now().toString(), ...data, upvotes: 0, commentCount: 0, createdAt: "just now" },
+      ...prev,
+    ]);
+  }
 
   return (
     <div className="min-h-screen bg-gray-950">
@@ -32,7 +40,10 @@ export default function FeedPage() {
           <Link href="/" className="font-bold text-lg tracking-tight">
             Project<span className="text-marcy-500">Marcy</span>
           </Link>
-          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-marcy-500 hover:bg-marcy-600 text-sm font-medium transition-colors">
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-marcy-500 hover:bg-marcy-600 text-sm font-medium transition-colors"
+          >
             <PenLine size={14} />
             Post
           </button>
@@ -58,9 +69,9 @@ export default function FeedPage() {
         </div>
 
         {/* Feed */}
-        {posts.length > 0 ? (
+        {filtered.length > 0 ? (
           <div className="flex flex-col gap-3">
-            {posts.map((post) => (
+            {filtered.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </div>
@@ -70,6 +81,10 @@ export default function FeedPage() {
           </p>
         )}
       </main>
+
+      {showModal && (
+        <CreatePostModal onClose={() => setShowModal(false)} onSubmit={handleNewPost} />
+      )}
     </div>
   );
 }

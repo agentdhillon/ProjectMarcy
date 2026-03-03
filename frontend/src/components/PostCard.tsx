@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronUp, MessageCircle } from "lucide-react";
 import { type Post, type PostTag } from "@/data/mockPosts";
 
@@ -12,23 +13,25 @@ const TAG_STYLES: Record<PostTag, string> = {
 };
 
 export function PostCard({ post }: { post: Post }) {
+  const router = useRouter();
   const [upvotes, setUpvotes] = useState(post.upvotes);
   const [voted, setVoted] = useState(false);
 
-  function handleUpvote() {
+  function handleUpvote(e: React.MouseEvent) {
+    e.stopPropagation();
     setUpvotes((u) => (voted ? u - 1 : u + 1));
     setVoted((v) => !v);
   }
 
   return (
-    <article className="bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 flex gap-4 hover:border-gray-700 transition-colors cursor-pointer">
+    <article
+      onClick={() => router.push(`/feed/${post.id}`)}
+      className="bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 flex gap-4 hover:border-gray-700 transition-colors cursor-pointer"
+    >
       {/* Vote column */}
       <div className="flex flex-col items-center gap-1 pt-0.5 min-w-[2.5rem]">
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleUpvote();
-          }}
+          onClick={handleUpvote}
           className={`p-1 rounded-md transition-colors ${
             voted
               ? "text-marcy-500 bg-marcy-500/10"
