@@ -35,11 +35,13 @@ async def health_check():
     return {"status": "ok"}
 
 
-# Import and register route modules here as you build them, e.g.:
-# from app.routes import posts, auth, ai_chat, rooms, music
+from app.routes.ai_chat import router as ai_chat_router
+app.include_router(ai_chat_router, prefix="/ai", tags=["ai"])
+
+# Register additional route modules here as you build them, e.g.:
+# from app.routes import posts, auth, rooms, music
 # app.include_router(posts.router, prefix="/posts", tags=["posts"])
 # app.include_router(auth.router, prefix="/auth", tags=["auth"])
-# app.include_router(ai_chat.router, prefix="/ai", tags=["ai"])
 # app.include_router(rooms.router, prefix="/rooms", tags=["rooms"])
 # app.include_router(music.router, prefix="/music", tags=["music"])
 
